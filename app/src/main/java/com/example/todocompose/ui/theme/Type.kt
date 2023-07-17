@@ -44,6 +44,16 @@ val Typography = Typography(
         fontSize = 18.sp,
         color = DarkGrey
     ),
+    bodySmall = TextStyle(
+        fontFamily = imprimaFamily,
+        fontSize = 12.sp,
+        color = DarkGrey
+    ),
+    titleMedium = TextStyle(
+        fontFamily = interFamily,
+        fontSize = 16.sp,
+        color = OffWhite
+    )
     /* Other default text styles to override
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
