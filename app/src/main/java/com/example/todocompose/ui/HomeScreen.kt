@@ -186,7 +186,7 @@ fun NotifyFab() {
         shape = CircleShape,
         containerColor = Color.Blue,
         onClick = {
-            service.showNotification()
+            service.showNotification(service.getInitialQuiz())
         },
         modifier = Modifier.size(50.dp)
     ) {

@@ -1,0 +1,23 @@
+{
+  "word": "Aveugle",
+  "example": "L'amour n'est pas aveugle, il est fou!",
+  "translated": "Love is not blind, it is crazy!",
+  "candidates": [
+    {
+      "word": "Flying",
+      "isGuessed": false,
+      "isTrue": false
+    },
+    {
+      "word": "Star",
+      "isGuessed": false,
+      "isTrue": false
+    },
+    {
+      "word": "Blind",
+      "isGuessed": false,
+      "isTrue": true
+    }
+  ],
+  "answer": "Blind"
+}
