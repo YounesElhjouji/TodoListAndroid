@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -44,6 +45,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.todo.view.screens.Todo.TodoViewModel
+import com.example.todocompose.NotificationService
 import com.example.todocompose.R
 import com.example.todocompose.data.entities.DialogViewModel
 import com.example.todocompose.data.entities.Todo
@@ -152,6 +154,7 @@ fun Fabs(todoViewModel: TodoViewModel, dialogVM: DialogViewModel, modifier: Modi
             color = Red,
             contentDescription = "Delete done todos",
             onClick = { todoViewModel.removeDoneTodos() })
+        NotifyFab()
         MyFab(iconId = R.drawable.plus,
             color = Green,
             contentDescription = "Add todo",
@@ -170,6 +173,26 @@ fun MyFab(iconId: Int, color: Color, contentDescription: String, onClick: () -> 
         Icon(
             painter = painterResource(iconId),
             contentDescription = contentDescription,
+            tint = OffWhite,
+            modifier = Modifier.size(30.dp)
+        )
+    }
+}
+
+@Composable
+fun NotifyFab() {
+    val service = NotificationService(LocalContext.current)
+    FloatingActionButton(
+        shape = CircleShape,
+        containerColor = Color.Blue,
+        onClick = {
+            service.showNotification()
+        },
+        modifier = Modifier.size(50.dp)
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.baseline_notifications_24),
+            contentDescription = "notify",
             tint = OffWhite,
             modifier = Modifier.size(30.dp)
         )
@@ -247,7 +270,7 @@ fun AddDialog(dialogVM: DialogViewModel, todosVM: TodoViewModel) {
                             onClick = {
                                 todosVM.addTodo(Todo(title = titleValue))
                                 dialogVM.hide()
-                                      },
+                            },
                         ) {
                             Text(text = "Confirm", style = typography.titleMedium)
                         }

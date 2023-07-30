@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 
 class DialogViewModel(): ViewModel()
 {
-    var showDialog = mutableStateOf(true)
+    var showDialog = mutableStateOf(false)
         private set
 
     fun hide() {
