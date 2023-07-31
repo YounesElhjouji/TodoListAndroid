@@ -1,7 +1,15 @@
 {
   "word": "Aveugle",
-  "example": "L'amour n'est pas aveugle, il est fou!",
-  "translated": "Love is not blind, it is crazy!",
+  "example": {
+    "sentence": "L'amour n'est pas aveugle, il est fou!",
+    "start": 18,
+    "end": 25
+  },
+  "translated": {
+    "sentence": "Love is not blind, it is crazy!",
+    "start": 12,
+    "end": 17
+  },
   "candidates": [
     {
       "word": "Flying",

@@ -8,7 +8,7 @@ import android.os.Looper
 import android.util.Log
 import org.json.JSONObject
 
-class AnswerReceiver: BroadcastReceiver() {
+class AnswerReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val service = NotificationService(context)
@@ -25,26 +25,30 @@ class AnswerReceiver: BroadcastReceiver() {
             quiz = checkGuessed(quiz, candidate)
             service.showNotification(quiz)
             if (service.isQuizSolved(quiz.getJSONArray("candidates"))) {
-                scheduleAnnotationRemoval(service)
+                val notificationId = quiz.getInt("notificationId")
+                scheduleAnnotationRemoval(service, notificationId)
             }
         }
 
     }
 
-    private fun scheduleAnnotationRemoval(notificationService: NotificationService){
+    private fun scheduleAnnotationRemoval(
+        notificationService: NotificationService,
+        notificationID: Int
+    ) {
         val handler = Handler(Looper.getMainLooper())
         val runnable = Runnable {
-            notificationService.dismissNotification()
+            notificationService.dismissNotification(notificationID)
         }
         handler.postDelayed(runnable, 3000L)
     }
 
-    private fun checkGuessed(quiz: JSONObject, choice: String): JSONObject{
+    private fun checkGuessed(quiz: JSONObject, choice: String): JSONObject {
         val candidates = quiz.getJSONArray("candidates")
         for (i in 0 until candidates.length()) {
             val candidate = candidates.getJSONObject(i)
             val word = candidate.getString("word")
-            if (choice.lowercase() == word.lowercase()){
+            if (choice.lowercase() == word.lowercase()) {
                 Log.i(TAG, "Marking word $word guessed")
                 candidate.put("isGuessed", true)
             }
