@@ -1,11 +1,12 @@
 package com.example.todocompose
 
+import android.content.Context
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-
-
-
+import okhttp3.Response
+import org.json.JSONObject
+import java.io.IOException
 
 
 class FCMTokenService : FirebaseMessagingService() {
@@ -13,34 +14,70 @@ class FCMTokenService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.i(TAG, "Refreshed token :: $token")
-//        // If you want to send messages to this application instance or
-//        // manage this apps subscriptions on the server side, send the
-//        // Instance ID token to your app server.
-//        sendRegistrationToServer(token)
+        saveTokenLocally(token)
+        sendRegistrationToServer(token)
+    }
+
+    private fun saveTokenLocally(token: String) {
+        val sharedPreference =  getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+        val editor = sharedPreference.edit()
+        editor.putString("token", token)
+        editor.apply()
+    }
+
+    private fun sendRegistrationToServer(token: String) {
+        ServerInterface.sendRegistrationToken(token, object : ServerInterface.ServerCallback {
+            override fun onSuccess(response: Response) {
+                Log.i(TAG, "Token registration done successfully")
+            }
+            override fun onFailure(exception: IOException) {
+                Log.e(TAG, "Token registration failed")
+                exception.printStackTrace()
+            }
+        })
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        // ...
+        val notificationService = NotificationService(this)
 
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: " + remoteMessage.from)
-
-        // Check if message contains a data payload.
-        if (remoteMessage.data.size > 0) {
+        if (remoteMessage.data.isNotEmpty()) {
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
         }
+        val data = remoteMessage.data
+        if (data.containsKey("quiz")) {
+            val quizJsonString = data["quiz"]
+                ?: throw Exception("Expected quiz to be string attribute of FCM message")
+            val quiz = convertStringToJson(quizJsonString)
+            if (quiz != null) {
+                Log.i(TAG, "Received Quiz JSON: $quiz")
+                if (!notificationService.isNotificationActive()) {
+                    notificationService.showNotification(quiz)
+                } else {
+                    Log.i(TAG, "Ignoring notification because another one is already shown")
+                }
 
+            } else {
+                Log.e(TAG, "Failed to parse Quiz JSON")
+            }
+        }
         // Check if message contains a notification payload.
         if (remoteMessage.notification != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.notification!!.body)
         }
-
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
     }
 
-    companion object{
+    private fun convertStringToJson(jsonString: String): JSONObject? {
+        return try {
+            JSONObject(jsonString)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error converting JSON String to JSONObject: ${e.message}")
+            null
+        }
+    }
+
+    companion object {
         private const val TAG = "FCMTokenService"
+        const val SHARED_PREFERENCE_NAME = "FCM_VALUES"
     }
 }

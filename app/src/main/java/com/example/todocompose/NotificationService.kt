@@ -13,6 +13,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.text.buildSpannedString
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import java.io.InputStream
 
@@ -25,7 +26,15 @@ class NotificationService(
 
     fun showNotification(quiz: JSONObject) {
         Log.i(TAG, "Creating notification to show")
-        val notificationId = quiz.getInt("notificationId")
+
+        val notificationId = try {
+            quiz.getInt("notificationId")
+        } catch (e: JSONException) {
+            Log.w(TAG, "Quiz has no id, and id will be set")
+            quiz.put("notificationId", generateNotificationId())
+            quiz.getInt("notificationId")
+        }
+
         val word = quiz.getString("word")
         val example = quiz.getJSONObject("example")
         val translated = quiz.getJSONObject("translated")
@@ -34,8 +43,9 @@ class NotificationService(
         val text = getNotificationText(example, translated, isSolved)
         val builder = NotificationCompat.Builder(context, MAIN_CHANNEL_ID)
             .setSmallIcon(R.drawable.baseline_quiz_24)
-            .setChannelId(MAIN_CHANNEL_ID)
+            .setChannelId(QUIZ_CHANNEL_ID)
             .setContentTitle(word)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(text))
             .setContentText(text)
 
         if (!isSolved) {
@@ -61,11 +71,19 @@ class NotificationService(
             val styledTranslated = getStyledSentence(translated)
             return buildSpannedString {
                 append(styledExample)
-                append("\n")
+                append("\n\n")
                 append(styledTranslated)
             }
         }
         return SpannedString.valueOf(styledExample)
+    }
+
+    fun isNotificationActive(): Boolean {
+        val activeNotifications = notificationManager.activeNotifications
+        val isNotificationFromMyApp = activeNotifications.any { notification ->
+            notification.packageName == "com.example.todocompose"
+        }
+        return isNotificationFromMyApp
     }
 
     private fun getStyledSentence(example: JSONObject): SpannableString {
@@ -149,6 +167,7 @@ class NotificationService(
 
     companion object {
         const val MAIN_CHANNEL_ID = "main_channel"
+        const val QUIZ_CHANNEL_ID = "quiz_channel"
         private const val TAG = "NotifSvc"
     }
 }

@@ -17,11 +17,12 @@ class MyApp: Application() {
 
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
-            NotificationService.MAIN_CHANNEL_ID,
-            "Main",
+            NotificationService.QUIZ_CHANNEL_ID,
+            "Quiz",
             NotificationManager.IMPORTANCE_DEFAULT
         )
-        channel.description = "Main and probably only channel in this app"
+        channel.setSound(null, null)
+        channel.description = "Interactive quiz notifications"
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)

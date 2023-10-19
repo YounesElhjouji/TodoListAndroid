@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "880321789182",
+    "project_id": "idyllic-folio-386518",
+    "storage_bucket": "idyllic-folio-386518.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:880321789182:android:f4dfd39a0b91f37fae39af",
+        "android_client_info": {
+          "package_name": "com.example.todocompose"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "880321789182-ggvlob1r6q1r4iu82lbei1oklatagi24.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHiGj9H8FRskopOgGo9zz4wUzlLD_k5Lc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "880321789182-ggvlob1r6q1r4iu82lbei1oklatagi24.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:880321789182:android:4925925be0db883bae39af",
+        "android_client_info": {
+          "package_name": "com.linguify.linguify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "880321789182-ggvlob1r6q1r4iu82lbei1oklatagi24.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHiGj9H8FRskopOgGo9zz4wUzlLD_k5Lc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "880321789182-ggvlob1r6q1r4iu82lbei1oklatagi24.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
